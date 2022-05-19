@@ -1,6 +1,6 @@
 {
   "development": {
-    "url": "postgres://eunjzloy:5VJlUE0-Df4uvGwH9IpXkt1n6-IEzf6n@hattie.db.elephantsql.com/eunjzloy"
+    "url": "postgres://osytquep:Iua8BJWTTWIgHEzMMgeDXnunwce591mN@abul.db.elephantsql.com/osytquep"
   },
   "test": {
     "username": "root",

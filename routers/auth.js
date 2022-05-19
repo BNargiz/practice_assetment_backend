@@ -4,6 +4,8 @@ const { toJWT } = require("../auth/jwt");
 const authMiddleware = require("../auth/middleware");
 const User = require("../models/").user;
 const { SALT_ROUNDS } = require("../config/constants");
+const Space = require("../models").space;
+const Story = require("../models").story;
 
 const router = new Router();
 
@@ -17,7 +19,12 @@ router.post("/login", async (req, res, next) => {
         .send({ message: "Please provide both email and password" });
     }
 
-    const user = await User.findOne({ where: { email } });
+    // The space is stored in the redux store in the frontend include:
+
+    const user = await User.findOne({
+      where: { email },
+      include: [{ model: Space, include: [Story] }],
+    });
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
       return res.status(400).send({
@@ -47,11 +54,21 @@ router.post("/signup", async (req, res) => {
       name,
     });
 
+    // create a space 1
+    const newSpace = await Space.create({
+      title: newUser.name,
+      description: null,
+      backgroundColor: "#ffffff",
+      color: "#000000",
+      userId: newUser.id,
+    });
+
     delete newUser.dataValues["password"]; // don't send back the password hash
 
     const token = toJWT({ userId: newUser.id });
+    // The space is sent in the response of `/signup` along with the new user newSpace
 
-    res.status(201).json({ token, user: newUser.dataValues });
+    res.status(201).json({ token, user: newUser.dataValues, newSpace });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       return res
