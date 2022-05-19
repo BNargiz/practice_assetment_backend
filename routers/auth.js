@@ -62,13 +62,17 @@ router.post("/signup", async (req, res) => {
       color: "#000000",
       userId: newUser.id,
     });
-
-    delete newUser.dataValues["password"]; // don't send back the password hash
+    // Make a new query to get the correct format
+    const user = await User.findByPk(newUser.id, {
+      where: { email },
+      include: [{ model: Space, include: [Story] }],
+    });
+    delete user.dataValues["password"]; // don't send back the password hash
 
     const token = toJWT({ userId: newUser.id });
     // The space is sent in the response of `/signup` along with the new user newSpace
 
-    res.status(201).json({ token, user: newUser.dataValues, newSpace });
+    res.status(201).json({ token, user });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       return res
@@ -85,8 +89,11 @@ router.post("/signup", async (req, res) => {
 // - checking if a token is (still) valid
 router.get("/me", authMiddleware, async (req, res) => {
   // don't send back the password hash
-  delete req.user.dataValues["password"];
-  res.status(200).send({ ...req.user.dataValues });
+  const user = await User.findByPk(req.user.id, {
+    include: [{ model: Space, include: [Story] }],
+  });
+  delete user.dataValues["password"]; // don't send back the password hash
+  res.status(200).send({ user });
 });
 
 module.exports = router;
