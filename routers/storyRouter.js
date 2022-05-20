@@ -1,7 +1,9 @@
 const { Router } = require("express");
+const res = require("express/lib/response");
+
 const router = new Router();
 const Story = require("../models").story;
-const middleware = require("../auth/middleware");
+const Space = require("../models").space;
 
 router.delete("/delete/:id", async (request, response, next) => {
   try {
@@ -14,4 +16,5 @@ router.delete("/delete/:id", async (request, response, next) => {
     next(error);
   }
 });
+
 module.exports = router;
