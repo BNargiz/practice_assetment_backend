@@ -56,7 +56,7 @@ router.post("/signup", async (req, res) => {
 
     // create a space 1
     const newSpace = await Space.create({
-      title: newUser.name,
+      title: `${newUser.name}'s space`,
       description: null,
       backgroundColor: "#ffffff",
       color: "#000000",
@@ -93,7 +93,7 @@ router.get("/me", authMiddleware, async (req, res) => {
     include: [{ model: Space, include: [Story] }],
   });
   delete user.dataValues["password"]; // don't send back the password hash
-  res.status(200).send({ user });
+  res.status(200).send(user);
 });
 
 module.exports = router;
