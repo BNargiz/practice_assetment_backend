@@ -15,8 +15,8 @@ module.exports = {
       "spaces",
       [
         {
-          title: "title1",
-          description: "bxjkbvkjbxkjb",
+          title: "David`s Space",
+          description: "This is my personal space for stories for kids",
           backgroundColor: "#ffffff",
           color: "#000000",
           userId: 1,
@@ -24,8 +24,8 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          title: "title2",
-          description: "blabla",
+          title: "Alina`s Space",
+          description: "Hi, I love short stories about animals",
           backgroundColor: "#ffffff",
           color: "#000000",
           userId: 2,
